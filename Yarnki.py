@@ -1,9 +1,8 @@
-from ankiTools import findAnkiFolderSource
-from YarnConnection import takePhraseVideo
-from downloadModule import downloadURLVideo
+from ankiTools import findAnkiFolderSource,generateCards
 import os
 import time
 import msvcrt
+from rich.console import Console
 
 folderReq=findAnkiFolderSource()
 
@@ -13,41 +12,36 @@ else:
     print("We can´t found Anki Sources Folder")
     folder=input("Please enter your path of nbki Source Folder: ")
 
+console=Console()
+
 while(1):
     os.system("CLS")
     if not(os.path.exists(folder)):
         print("PATH no valid, try again...")
         time.sleep(1)
+        break
     
-    print("- - - Welcome to YARNKI - - -")
+    console.print("[blue]- - - Welcome to YARNKI - - -[/blue]")
+
     cad=input("Enter a word o phrase (Enter E to exit): ")
 
     if cad.upper()=="E":
         break
 
-    req=takePhraseVideo(cad)
-    for num,n in enumerate(req):
-        print(f"{num+1} - Transcription:{n["transcription"]} \n URL:{n["video"]}\n")
-    
-    ind=input("Choose the video that you want to use in Anki (Enter A to use all): ").upper()
-
     try:
-        if ind=="A":
-            for num,n in enumerate(req):
-                downloadURLVideo(n["video"],str(num))
-                print(f"{num+1}/{len(req)} created")
-            msvcrt.getch()
+        cant=int(input("Enter number of cards for each word/phrase: "))
+    except:
+        print("Enter a valid integer")
+        time.sleep(2)
+        break
 
-        else:
-            ind=int(ind)
-            downloadURLVideo(req[ind]["video"],"p")
-            print("Flashcard created")
-            msvcrt.getch()
+    for n in cad.split("|"):
+        console.print(f"[blue]{n.upper()}[/blue]")
+        generateCards(n,cant,folder)
+    
+    print("\nTask finished, press any key to continue...")
+    msvcrt.getch()
 
-
-    except Exception as e:
-        print(f"Error: {e}")
-        time.sleep(3)
     
 
 

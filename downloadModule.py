@@ -1,7 +1,6 @@
 import requests
 
 def downloadURLVideo(url:str,outputPath:str):
-    outputPath=outputPath+".mp4"
 
     videoReq=requests.get(url,stream=True)
 
@@ -12,5 +11,5 @@ def downloadURLVideo(url:str,outputPath:str):
 
 if __name__=="__main__":
     url="https://y.yarn.co/28d7446b-79f8-46ec-a875-3cd30c585a4e.mp4"
-    output="video"
+    output="video.mp4"
     downloadURLVideo(url,output)
